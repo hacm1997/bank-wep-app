@@ -57,7 +57,7 @@ export default function Login() {
                         />
                         <button
                             type="submit"
-                            className="w-full font-semibold h-[40px] bg-[#9233E9] text-white rounded-md mt-2 transition-all duration-150 hover:bg-[#6b24ad]"
+                            className="w-full cursor-pointer font-semibold h-[40px] bg-[#9233E9] text-white rounded-md mt-2 transition-all duration-150 hover:bg-[#6b24ad]"
                         >
                             Iniciar sesión
                         </button>

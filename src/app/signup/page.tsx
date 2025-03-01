@@ -1,10 +1,10 @@
-import { Login } from "@/libs/domain/login";
+import { Signup } from "@/libs/domain/singup";
 
 export default async function Home() {
 
     return (
         <main>
-            <Login />
+            <Signup />
         </main>
     );
 }

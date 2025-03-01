@@ -1,9 +1,14 @@
+import { AuthProvider } from "@/libs/context/auth";
+import { HomeComponent } from "@/libs/domain/dashboard/components/home/home";
+import MainLayout from "@/libs/domain/dashboard/components/layout/main-layout";
 
 export default async function Home() {
 
     return (
-        <main>
-            <h1>Welcome to My APP</h1>
-        </main>
+        <AuthProvider>
+            <MainLayout>
+                <HomeComponent />
+            </MainLayout>
+        </AuthProvider>
     );
 }
