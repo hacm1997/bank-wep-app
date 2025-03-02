@@ -2,15 +2,11 @@ import { AuthProvider } from "@/libs/context/auth";
 import MainLayout from "@/libs/domain/dashboard/components/layout/main-layout";
 import { Transactions } from "@/libs/domain/dashboard/components/transactions/transactions";
 
-interface TransactionsPageProps {
-    searchParams: {
-        link_id?: string;
-        account_id?: string;
-    };
-}
-
-export default async function Home({ searchParams }: TransactionsPageProps) {
-    const { link_id, account_id } = await searchParams;
+export default async function Home({
+    searchParams
+}: { searchParams: Promise<Record<string, string | undefined>> }) {
+    const resolvedParams = await searchParams;
+    const { link_id, account_id } = resolvedParams;
 
     return (
         <AuthProvider>

@@ -78,6 +78,7 @@ export const useTransactions = (params?: UseTransactionsParams) => {
   }, [params?.link_id, params?.account_id]);
 
   const fetchTransactionDetails = useCallback(async () => {
+    setTransactionDetails(undefined);
     try {
       if (params?.transaction_id) {
         const res = await getTransactionDetail(params?.transaction_id);
