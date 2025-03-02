@@ -1,8 +1,10 @@
 import { apiService } from "../services/bank-service.instance";
 
-export const banks = async () => {
+export const getBanks = async (page_size?: number, page?: number) => {
   try {
-    const banks = await apiService.get("/banks/");
+    const banks = await apiService.get(
+      `/banks?page_size=${page_size ?? 10}&page=${page ?? 1}`
+    );
     return banks.data;
   } catch (error: unknown) {
     if (error instanceof Error) {

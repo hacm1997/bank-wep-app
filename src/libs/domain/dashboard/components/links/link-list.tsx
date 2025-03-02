@@ -1,37 +1,38 @@
 'use client'
-import { BanksModel, useBanks } from '@/libs/hooks/use-banks'
-import Image from 'next/image'
-import React, { useState } from 'react'
-import { AiFillBank } from 'react-icons/ai'
-import ReactPaginate from 'react-paginate';
-import { SlActionRedo } from "react-icons/sl";
+import { LinkModel, useLinks } from "@/libs/hooks/use-links";
+import { useState } from "react";
 import styles from "@/libs/utils/pagination.module.css"
-import { AlertDialogModal } from '../modals/alert-dialog-modal'
-// import { IoMdInformationCircleOutline } from "react-icons/io";
+import ReactPaginate from "react-paginate";
+import { CiCircleRemove } from "react-icons/ci";
+import { AlertDeleteLinkModal } from "../modals/alert-delete-link-modal";
 
-export const HomeComponent = () => {
+interface Props {
+    handleShowAccount: (link_id: string) => void;
+}
+
+export const LinkList = ({ handleShowAccount }: Props) => {
     const [currentPage, setCurrentPage] = useState(1);
-    const { banks } = useBanks({ page: currentPage, page_size: 10 })
+    const { links, refetch } = useLinks({ page: currentPage, page_size: 10 })
     const [showModal, setShowModal] = useState(false);
     const [bankName, setBankName] = useState<string | undefined>(undefined)
-    const [bankDisplayName, setBankDisplayName] = useState<string | undefined>(undefined)
-
-    const handleShowModal = (name?: string, displayName?: string) => {
-        setShowModal(!showModal);
-        setBankName(name)
-        setBankDisplayName(displayName)
-    };
+    const [linkId, setLinkId] = useState<string | undefined>(undefined)
 
     const handlePageClick = (event: { selected: number }) => {
         setCurrentPage(event.selected + 1);
     };
 
+    const handleShowModal = (name?: string, linkId?: string) => {
+        setShowModal(!showModal);
+        setBankName(name)
+        setLinkId(linkId)
+    };
+
     return (
         <div className='pl-[350px] flex flex-col gap-10 pt-[50px] w-[94%] items-center h-[100vh]' >
             <div>
-                <h2 className='text-center text-[32px] font-bold'>List of banks / institutions</h2>
+                <h2 className='text-center text-[32px] font-bold'>List of banks partner</h2>
             </div>
-            {!banks ?
+            {!links ?
                 <h1 className='text-center text-[38px] text-[#E4E4E7]'>Loading data...</h1>
                 :
                 <div className="relative overflow-x-auto w-full">
@@ -39,16 +40,13 @@ export const HomeComponent = () => {
                         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
                                 <th scope="col" className="px-6 py-3">
-                                    Institution / Bank
+                                    Institution
                                 </th>
                                 <th scope="col" className="px-6 py-3">
-                                    Name
+                                    Access Mode
                                 </th>
                                 <th scope="col" className="px-6 py-3">
-                                    Type
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Country code
+                                    status
                                 </th>
                                 <th scope="col" className="px-6 py-3">
                                     Action
@@ -56,28 +54,25 @@ export const HomeComponent = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {banks && banks.results.length > 0 && banks.results.map((item: BanksModel) => (
+                            {links && links.results.length > 0 && links.results.map((item: LinkModel) => (
                                 <tr key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
                                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex gap-4">
-                                        {item.icon_logo ?
-                                            <Image src={item.icon_logo} width={25} height={25} alt={item.display_name} />
-                                            :
-                                            <AiFillBank className='text-[#E4E4E7] text-[20px]' />
-                                        }
-                                        <span>{item.display_name}</span>
+                                        {item.institution}
                                     </th>
                                     <td className="px-6 py-4">
-                                        {item.name}
+                                        {item.access_mode}
                                     </td>
                                     <td className="px-6 py-4">
-                                        {item.type}
+                                        {item.status}
                                     </td>
-                                    <td className="px-6 py-4">
-                                        {item.country_code}
-                                    </td>
-                                    <td className="px-6 py-4 flex gap-4">
-                                        <SlActionRedo className='text-[#E4E4E7] text-[20px] cursor-pointer' title='register bank' onClick={() => handleShowModal(item.name, item.display_name)} />
-                                        {/* <IoMdInformationCircleOutline className='text-[#E4E4E7] text-[20px] cursor-pointer' title='view details' /> */}
+                                    <td className="px-6 py-4 flex gap-4 items-center">
+                                        <button
+                                            className="p-2 rounded rounder-[20px] bg-transparent border-[1px] border-[#19B3A9] cursor-pointer"
+                                            onClick={() => handleShowAccount(item.id)}
+                                        >
+                                            See accounts
+                                        </button>
+                                        <CiCircleRemove className='text-red-500 text-[30px] cursor-pointer' onClick={() => handleShowModal(item.institution, item.id)} />
                                     </td>
                                 </tr>
                             ))}
@@ -88,7 +83,7 @@ export const HomeComponent = () => {
             <div className='pt-2'>
                 <ReactPaginate
                     breakLabel="..."
-                    pageCount={Math.ceil((banks?.count ?? 0) / 10)}
+                    pageCount={Math.ceil((links?.count ?? 0) / 10)}
                     // forcePage={pageInfo?.currentPage}
                     previousLabel={"<"}
                     nextLabel={">"}
@@ -101,8 +96,8 @@ export const HomeComponent = () => {
                 />
             </div>
             {showModal &&
-                <AlertDialogModal handleShowModal={handleShowModal} bankName={bankName} bankDisplayName={bankDisplayName} />
+                <AlertDeleteLinkModal handleShowModal={handleShowModal} name={bankName} link_id={linkId} refetch={refetch} />
             }
         </div>
-    )
+    );
 }

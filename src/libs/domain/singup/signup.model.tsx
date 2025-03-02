@@ -7,7 +7,7 @@ export const validateSignupSchema = zfd.formData({
     z
       .string({
         errorMap: () => ({
-          message: 'contraseña requerida',
+          message: 'password required',
         }),
       })
       .min(8, { message: "" }) // Minimum 8 characters
@@ -18,7 +18,7 @@ export const validateSignupSchema = zfd.formData({
     z
       .string({
         errorMap: () => ({
-          message: 'campo requeriido',
+          message: 'Required',
         }),
       })
       .min(8, { message: "" }) // Minimum 8 characters
@@ -28,7 +28,7 @@ export const validateSignupSchema = zfd.formData({
   // confirmPassword: zfd.text(passwordZod),
 })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Las contraseñas no coinciden",
+    message: "Passwords do not match",
     path: ["confirmPassword"],
   })
   .refine(
@@ -41,7 +41,7 @@ export const validateSignupSchema = zfd.formData({
       );
     },
     {
-      message: "La contraseña es válida", // validate message
+      message: "Password is valid", // validate message
       path: ["password"],
     })
 

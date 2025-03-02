@@ -1,26 +1,17 @@
-'use client'
-import { BanksModel, useBanks } from '@/libs/hooks/use-banks'
-import Image from 'next/image'
+import { AccountModel, useAccount } from '@/libs/hooks/use-account'
 import React, { useState } from 'react'
-import { AiFillBank } from 'react-icons/ai'
-import ReactPaginate from 'react-paginate';
-import { SlActionRedo } from "react-icons/sl";
+import ReactPaginate from 'react-paginate'
 import styles from "@/libs/utils/pagination.module.css"
-import { AlertDialogModal } from '../modals/alert-dialog-modal'
-// import { IoMdInformationCircleOutline } from "react-icons/io";
+import { IoArrowBackCircleOutline } from "react-icons/io5";
 
-export const HomeComponent = () => {
+interface Props {
+    linkId: string
+    handleBack: () => void
+}
+
+export const Accounts = ({ linkId, handleBack }: Props) => {
     const [currentPage, setCurrentPage] = useState(1);
-    const { banks } = useBanks({ page: currentPage, page_size: 10 })
-    const [showModal, setShowModal] = useState(false);
-    const [bankName, setBankName] = useState<string | undefined>(undefined)
-    const [bankDisplayName, setBankDisplayName] = useState<string | undefined>(undefined)
-
-    const handleShowModal = (name?: string, displayName?: string) => {
-        setShowModal(!showModal);
-        setBankName(name)
-        setBankDisplayName(displayName)
-    };
+    const { accounts } = useAccount({ link_id: linkId, page: currentPage, page_size: 10 })
 
     const handlePageClick = (event: { selected: number }) => {
         setCurrentPage(event.selected + 1);
@@ -28,10 +19,12 @@ export const HomeComponent = () => {
 
     return (
         <div className='pl-[350px] flex flex-col gap-10 pt-[50px] w-[94%] items-center h-[100vh]' >
-            <div>
-                <h2 className='text-center text-[32px] font-bold'>List of banks / institutions</h2>
+
+            <div className='flex gap-4 items-center'>
+                <IoArrowBackCircleOutline className='text-[#E4E4E7] text-[26px] cursor-pointer' onClick={handleBack} title='back to parnet bank list' />
+                <h2 className='text-center text-[32px] font-bold'>Accounts List</h2>
             </div>
-            {!banks ?
+            {!accounts ?
                 <h1 className='text-center text-[38px] text-[#E4E4E7]'>Loading data...</h1>
                 :
                 <div className="relative overflow-x-auto w-full">
@@ -39,16 +32,16 @@ export const HomeComponent = () => {
                         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
                                 <th scope="col" className="px-6 py-3">
-                                    Institution / Bank
+                                    Name
                                 </th>
                                 <th scope="col" className="px-6 py-3">
-                                    Name
+                                    Bank / institution
                                 </th>
                                 <th scope="col" className="px-6 py-3">
                                     Type
                                 </th>
                                 <th scope="col" className="px-6 py-3">
-                                    Country code
+                                    Balance Type
                                 </th>
                                 <th scope="col" className="px-6 py-3">
                                     Action
@@ -56,28 +49,28 @@ export const HomeComponent = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {banks && banks.results.length > 0 && banks.results.map((item: BanksModel) => (
+                            {accounts && accounts.results.length > 0 && accounts.results.map((item: AccountModel) => (
                                 <tr key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
                                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex gap-4">
-                                        {item.icon_logo ?
-                                            <Image src={item.icon_logo} width={25} height={25} alt={item.display_name} />
-                                            :
-                                            <AiFillBank className='text-[#E4E4E7] text-[20px]' />
-                                        }
-                                        <span>{item.display_name}</span>
+                                        {item.name}
                                     </th>
                                     <td className="px-6 py-4">
-                                        {item.name}
+                                        {item.institution.name}
                                     </td>
                                     <td className="px-6 py-4">
                                         {item.type}
                                     </td>
                                     <td className="px-6 py-4">
-                                        {item.country_code}
+                                        {item.balance_type}
                                     </td>
-                                    <td className="px-6 py-4 flex gap-4">
-                                        <SlActionRedo className='text-[#E4E4E7] text-[20px] cursor-pointer' title='register bank' onClick={() => handleShowModal(item.name, item.display_name)} />
-                                        {/* <IoMdInformationCircleOutline className='text-[#E4E4E7] text-[20px] cursor-pointer' title='view details' /> */}
+                                    <td className="px-6 py-4 flex gap-4 items-center">
+                                        <button
+                                            className="p-2 rounded rounder-[20px] bg-transparent border-[1px] border-[#19B3A9] cursor-pointer"
+                                        // onClick={() => handleShowAccount(item.id)}
+                                        >
+                                            See transactions
+                                        </button>
+                                        {/* <CiCircleRemove className='text-red-500 text-[30px] cursor-pointer' onClick={() => handleShowModal(item.institution, item.id)} /> */}
                                     </td>
                                 </tr>
                             ))}
@@ -88,7 +81,7 @@ export const HomeComponent = () => {
             <div className='pt-2'>
                 <ReactPaginate
                     breakLabel="..."
-                    pageCount={Math.ceil((banks?.count ?? 0) / 10)}
+                    pageCount={Math.ceil((accounts?.count ?? 0) / 10)}
                     // forcePage={pageInfo?.currentPage}
                     previousLabel={"<"}
                     nextLabel={">"}
@@ -100,9 +93,9 @@ export const HomeComponent = () => {
                     activeClassName={styles.paginationsActive}
                 />
             </div>
-            {showModal &&
-                <AlertDialogModal handleShowModal={handleShowModal} bankName={bankName} bankDisplayName={bankDisplayName} />
-            }
+            {/*showModal &&
+                <AlertDeleteLinkModal handleShowModal={handleShowModal} name={bankName} link_id={linkId} refetch={refetch} />
+            */}
         </div>
     )
 }

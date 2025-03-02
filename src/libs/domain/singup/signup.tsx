@@ -6,6 +6,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { authSignup } from '@/libs/shared/api/auth'
 import { ErrorMessage } from '@hookform/error-message';
+import Link from 'next/link'
 
 export default function Signup() {
     const router = useRouter()
@@ -45,9 +46,9 @@ export default function Signup() {
                 <div className="flex justify-center w-[80%] md:w-[70%] xl:w-[25%] rounded-[8px] transition-all duration-75 hover:shadow-cyan-glow bg-[#1A1E28] ">
                     <FormProvider {...methods}>
                         <form onSubmit={handleSubmit(handleSingup)} className="flex flex-col gap-4 w-full p-8">
-                            <h2 className='text-center text-[24px] pb-2 font-semibold'>Registro de usuario</h2>
+                            <h2 className='text-center text-[24px] pb-2 font-semibold'>User Sing up</h2>
                             <input
-                                className="h-[40px] bg-transparent border-[1px] border-[#9233E9] p-2 rounded-md"
+                                className="h-[40px] bg-transparent border-[1px] border-[#1c7eda] p-2 rounded-md"
                                 type="text"
                                 placeholder="Email o username"
                                 {...methods.register('userNameEmail')}
@@ -65,9 +66,9 @@ export default function Signup() {
                                 )}
                             />
                             <input
-                                className="h-[40px] bg-transparent border-[1px] border-[#9233E9] p-2 rounded-md"
+                                className="h-[40px] bg-transparent border-[1px] border-[#1c7eda] p-2 rounded-md"
                                 type="password"
-                                placeholder="Contraseña"
+                                placeholder="Password"
                                 {...methods.register('password')}
                                 required
                             />
@@ -75,14 +76,14 @@ export default function Signup() {
                                 <span
                                     style={{ color: '#65A30D', fontSize: '12px', marginTop: '5px' }}
                                 >
-                                    Contraseña válida
+                                    Valid password
                                 </span>
                             )}
                             {errors.password && watch('password')?.length >= 8 ? (
                                 <span
                                     style={{ color: '#F87171', fontSize: '12px', marginTop: '5px' }}
                                 >
-                                    Contraseña inválida
+                                    Invalid password
                                 </span>
                             ) : (
                                 <>
@@ -104,9 +105,9 @@ export default function Signup() {
                                 </>
                             )}
                             <input
-                                className="h-[40px] bg-transparent border-[1px] border-[#9233E9] p-2 rounded-md"
+                                className="h-[40px] bg-transparent border-[1px] border-[#1c7eda] p-2 rounded-md"
                                 type="password"
-                                placeholder="Contraseña"
+                                placeholder="Confirm Password"
                                 {...methods.register('confirmPassword')}
                                 required
                             />
@@ -128,16 +129,26 @@ export default function Signup() {
                                     <span
                                         style={{ color: '#65A30D', fontSize: '12px', marginTop: '5px' }}
                                     >
-                                        Las contraseñas coinciden
+                                        Passwords match
                                     </span>
                                 )}
-                            <button
-                                type="submit"
-                                disabled={!isValid}
-                                className="w-full cursor-pointer font-semibold h-[40px] bg-[#9233E9] text-white rounded-md mt-2 transition-all duration-150 hover:bg-[#6b24ad]"
-                            >
-                                Registrarme
-                            </button>
+                            <div className='flex gap-4 justify-between'>
+                                <Link href='/' title='signup' className='w-[44%]'>
+                                    <button
+                                        type="submit"
+                                        className="w-full cursor-pointer font-semibold h-[40px] bg-[#7ab6eec7] text-white rounded-md mt-2 transition-all duration-150 hover:bg-[#7ab6eec7]"
+                                    >
+                                        Login
+                                    </button>
+                                </Link>
+                                <button
+                                    disabled={!isValid}
+                                    type="submit"
+                                    className="w-[44%] cursor-pointer font-semibold h-[40px] bg-[#1c7eda] text-white rounded-md mt-2 transition-all duration-150 hover:bg-[#1463ac]"
+                                >
+                                    Sign up
+                                </button>
+                            </div>
                         </form>
                     </FormProvider>
                 </div>
