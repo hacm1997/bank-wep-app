@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(req: NextRequest) {
-  const token = req.cookies.get("access_token");
+  const token = req.cookies.get("accessToken");
   const protectedRoutes = ["/dashboard", "/profile"];
 
   if (protectedRoutes.some((route) => req.nextUrl.pathname.startsWith(route))) {

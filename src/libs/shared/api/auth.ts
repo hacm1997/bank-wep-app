@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import { apiService } from "../services/bank-service.instance";
 
 export const authLogin = async (username: string, password: string) => {
@@ -6,6 +7,20 @@ export const authLogin = async (username: string, password: string) => {
       username,
       password,
     });
+
+    const { access_token, refresh_token } = loginUser.data;
+
+    Cookies.set("accessToken", access_token, {
+      expires: 1 / 3,
+      secure: true,
+      sameSite: "strict",
+    });
+    Cookies.set("refreshToken", refresh_token, {
+      expires: 7,
+      secure: true,
+      sameSite: "strict",
+    });
+
     return loginUser.data;
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -17,8 +32,12 @@ export const authLogin = async (username: string, password: string) => {
 
 export const Logout = async () => {
   try {
-    const loginUser = await apiService.post("/api/auth/logout/");
-    return loginUser.data;
+    await apiService.post("/api/auth/logout/");
+
+    Cookies.remove("accessToken");
+    Cookies.remove("refreshToken");
+
+    return { message: "Logged out successfully" };
   } catch (error: unknown) {
     if (error instanceof Error) {
       return Promise.reject(new Error(error.message));
