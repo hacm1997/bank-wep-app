@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import ReactPaginate from 'react-paginate'
 import styles from "@/libs/utils/pagination.module.css"
 import { IoArrowBackCircleOutline } from "react-icons/io5";
+import Link from 'next/link';
 
 interface Props {
     linkId: string
@@ -64,13 +65,13 @@ export const Accounts = ({ linkId, handleBack }: Props) => {
                                         {item.balance_type}
                                     </td>
                                     <td className="px-6 py-4 flex gap-4 items-center">
-                                        <button
-                                            className="p-2 rounded rounder-[20px] bg-transparent border-[1px] border-[#19B3A9] cursor-pointer"
-                                        // onClick={() => handleShowAccount(item.id)}
-                                        >
-                                            See transactions
-                                        </button>
-                                        {/* <CiCircleRemove className='text-red-500 text-[30px] cursor-pointer' onClick={() => handleShowModal(item.institution, item.id)} /> */}
+                                        <Link href={`/dashboard/transactions?link_id=${linkId}&account_id=${item.id}`}>
+                                            <button
+                                                className="p-2 rounded rounder-[20px] bg-transparent border-[1px] border-[#19B3A9] cursor-pointer"
+                                            >
+                                                See transactions
+                                            </button>
+                                        </Link>
                                     </td>
                                 </tr>
                             ))}

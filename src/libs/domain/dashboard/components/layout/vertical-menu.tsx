@@ -34,8 +34,8 @@ export const VerticalMenu = ({ isMenuOpen }: Props) => {
     const isActive = (path: string) => pathname === path;
 
     return (
-        <div className={`fixed top-10 left-0 h-screen w-64 bg-[#14171F] border-none transition-transform duration-300 lg:block ${isMenuOpen ? "translate-x-0" : "-translate-x-64"} lg:translate-x-0`}>
-            <div className="pt-10 px-4 space-y-4">
+        <div className={`fixed top-0 left-0 h-screen w-64 bg-[#14171F] border-none transition-transform duration-300 lg:block ${isMenuOpen ? "translate-x-0" : "-translate-x-64"} lg:translate-x-0`}>
+            <div className="pt-20 px-4 space-y-4">
                 <div className="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-500 group">
                     <FaCheckCircle className='text-[#E4E4E7] text-[20px]' />
                     <span>User: <br />
