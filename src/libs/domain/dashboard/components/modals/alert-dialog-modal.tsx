@@ -1,5 +1,6 @@
 import { useAuth } from '@/libs/context/auth'
 import { createLink } from '@/libs/shared/api/link'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 import { toast } from 'react-toastify'
 
@@ -11,6 +12,7 @@ interface Props {
 
 export const AlertDialogModal = ({ handleShowModal, bankName, bankDisplayName }: Props) => {
     const { user } = useAuth()
+    const router = useRouter()
 
     const handlerCreateLink = () => {
         const toastId = toast.loading("Adding bank...");
@@ -23,6 +25,7 @@ export const AlertDialogModal = ({ handleShowModal, bankName, bankDisplayName }:
                     autoClose: 3000,
                 });
                 handleShowModal()
+                router.push('/dashboard/links')
             }).catch((error) => {
                 console.error(error)
                 toast.update(toastId, {
