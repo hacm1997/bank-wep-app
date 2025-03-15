@@ -11,7 +11,7 @@ export const HeaderMenu = ({ toggleMenu }: Props) => {
         <div>
             <nav className="bg-[#14171F] border-b border-[#19B3A9]">
                 <div className="flex justify-between items-center px-9">
-                    <button id="menuBtn" className='visible md:invisible' onClick={toggleMenu}>
+                    <button id="menuBtn" className='visible md:invisible z-50' onClick={toggleMenu}>
                         <FaBars className='text-[#E4E4E7] text-[20px] cursor-pointer' />
                     </button>
 

@@ -29,8 +29,43 @@ export const Transactions = ({ linkId, accountId }: TransactionsProps) => {
         setModalIsOpen(false);
     }
 
+    const TableBodyRows = () => {
+        return (
+            transactions && transactions.results.length > 0 && transactions.results.map((item: TransactionModel) => (
+                <tr key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex gap-4">
+                        {item.account.institution.name} {/*({item.account.institution.type})*/}
+                    </th>
+                    <td className="px-6 py-4">
+                        {item.category}
+                    </td>
+                    <td className="px-6 py-4">
+                        {item.type}
+                    </td>
+                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white ">
+                        <span className={item.status === 'PENDING' ? 'text-amber-400' : item.status === 'PROCESSED' ? 'text-emerald-400' : 'text-red-500'}>
+                            {item.status}
+                        </span>
+                    </td>
+                    <td className="px-6 py-4">
+                        {item.amount}
+                    </td>
+                    <td className="px-6 py-4">
+                        {item.balance}
+                    </td>
+                    <td className="px-6 py-4 flex gap-4 items-center">
+                        <IoMdInformationCircleOutline
+                            className='text-[#E4E4E7] text-[26px] cursor-pointer' title='See details'
+                            onClick={() => hanldeModal(item.id)}
+                        />
+                    </td>
+                </tr>
+            ))
+        )
+    }
+
     return (
-        <div className='pl-[350px] flex flex-col gap-10 pt-[50px] w-[94%] items-center h-[100vh]' >
+        <div className='pl-[20px] md:pl-[350px] flex flex-col gap-10 pt-[50px] w-[94%] items-center h-[100vh]' >
             <div className='flex flex-col gap-4'>
                 <h2 className='text-center text-[32px] font-bold'>KPI</h2>
                 <div className="flex flex-wrap gap-4">
@@ -54,7 +89,7 @@ export const Transactions = ({ linkId, accountId }: TransactionsProps) => {
             {!transactions ?
                 <h1 className='text-center text-[38px] text-[#E4E4E7]'>Loading transactions data...</h1>
                 :
-                <div className="relative overflow-x-auto w-full">
+                <div className="overflow-x-auto w-full">
                     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
@@ -82,36 +117,7 @@ export const Transactions = ({ linkId, accountId }: TransactionsProps) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {transactions && transactions.results.length > 0 && transactions.results.map((item: TransactionModel) => (
-                                <tr key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex gap-4">
-                                        {item.account.institution.name} {/*({item.account.institution.type})*/}
-                                    </th>
-                                    <td className="px-6 py-4">
-                                        {item.category}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {item.type}
-                                    </td>
-                                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white ">
-                                        <span className={item.status === 'PENDING' ? 'text-amber-400' : item.status === 'PROCESSED' ? 'text-emerald-400' : 'text-red-500'}>
-                                            {item.status}
-                                        </span>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {item.amount}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {item.balance}
-                                    </td>
-                                    <td className="px-6 py-4 flex gap-4 items-center">
-                                        <IoMdInformationCircleOutline
-                                            className='text-[#E4E4E7] text-[26px] cursor-pointer' title='See details'
-                                            onClick={() => hanldeModal(item.id)}
-                                        />
-                                    </td>
-                                </tr>
-                            ))}
+                            <TableBodyRows />
                         </tbody>
                     </table>
                 </div>

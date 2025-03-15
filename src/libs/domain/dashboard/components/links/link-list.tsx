@@ -27,15 +27,42 @@ export const LinkList = ({ handleShowAccount }: Props) => {
         setLinkId(linkId)
     };
 
+    const TableBodyRows = () => {
+        return (
+            links && links.results.length > 0 && links.results.map((item: LinkModel) => (
+                <tr key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex gap-4">
+                        {item.institution}
+                    </th>
+                    <td className="px-6 py-4">
+                        {item.access_mode}
+                    </td>
+                    <td className="px-6 py-4">
+                        {item.status}
+                    </td>
+                    <td className="px-6 py-4 flex gap-4 items-center">
+                        <button
+                            className="p-2 rounded rounder-[20px] bg-transparent border-[1px] border-[#19B3A9] cursor-pointer"
+                            onClick={() => handleShowAccount(item.id)}
+                        >
+                            See accounts
+                        </button>
+                        <CiCircleRemove className='text-red-500 text-[30px] cursor-pointer' onClick={() => handleShowModal(item.institution, item.id)} />
+                    </td>
+                </tr>
+            ))
+        )
+    }
+
     return (
-        <div className='pl-[350px] flex flex-col gap-10 pt-[50px] w-[94%] items-center h-[100vh]' >
+        <div className='pl-[20px] md:pl-[350px] flex flex-col gap-10 pt-[50px] w-[94%] items-center h-[100vh]' >
             <div>
                 <h2 className='text-center text-[32px] font-bold'>List of banks partner</h2>
             </div>
             {!links ?
                 <h1 className='text-center text-[38px] text-[#E4E4E7]'>Loading data...</h1>
                 :
-                <div className="relative overflow-x-auto w-full">
+                <div className="overflow-x-auto w-full">
                     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
@@ -54,28 +81,7 @@ export const LinkList = ({ handleShowAccount }: Props) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {links && links.results.length > 0 && links.results.map((item: LinkModel) => (
-                                <tr key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex gap-4">
-                                        {item.institution}
-                                    </th>
-                                    <td className="px-6 py-4">
-                                        {item.access_mode}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {item.status}
-                                    </td>
-                                    <td className="px-6 py-4 flex gap-4 items-center">
-                                        <button
-                                            className="p-2 rounded rounder-[20px] bg-transparent border-[1px] border-[#19B3A9] cursor-pointer"
-                                            onClick={() => handleShowAccount(item.id)}
-                                        >
-                                            See accounts
-                                        </button>
-                                        <CiCircleRemove className='text-red-500 text-[30px] cursor-pointer' onClick={() => handleShowModal(item.institution, item.id)} />
-                                    </td>
-                                </tr>
-                            ))}
+                            <TableBodyRows />
                         </tbody>
                     </table>
                 </div>
